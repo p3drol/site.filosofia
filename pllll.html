@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Filosofia — Pensadores, Ideias e Biografias</title>
+  <style>
+    :root{
+      --bg: #181f42;         /* azul bem escuro */
+      --accent: #6a0dad;     /* roxo */
+      --card: #12162b;       /* cartão escuro */
+      --muted: #bfc7df;
+      --accent-2: #ffcc00;
+      --glass: rgba(255,255,255,0.03);
+      --radius: 12px;
+    }
+
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+      background: linear-gradient(180deg,var(--bg), #0f1430);
+      color: #edf1ff;
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+      line-height:1.5;
+    }
+
+    header{
+      background: linear-gradient(90deg,var(--accent), #4b0082);
+      padding:28px 18px;
+      text-align:center;
+      box-shadow: 0 6px 18px rgba(10,8,20,0.5);
+      position:sticky;
+      top:0;
+      z-index:40;
+    }
+    header h1{margin:0;font-size:clamp(1.4rem,2.6vw,2.4rem);letter-spacing:0.6px}
+    header p{margin:8px 0 0;color:var(--muted);font-size:0.95rem}
+
+    nav{
+      margin-top:12px;
+    }
+    nav a{
+      color: rgba(255,255,255,0.95);
+      text-decoration:none;
+      padding:8px 12px;
+      border-radius:999px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.03), transparent);
+      margin:0 6px;
+      display:inline-block;
+      font-weight:600;
+      font-size:0.95rem;
+    }
+    nav a:hover{transform:translateY(-2px); box-shadow:0 6px 18px rgba(0,0,0,0.6)}
+
+    main{max-width:1200px;margin:28px auto;padding:0 18px 80px}
+
+    .lead{
+      display:flex;
+      gap:20px;
+      align-items:center;
+      margin-bottom:28px;
+      flex-wrap:wrap;
+    }
+    .lead .intro{
+      flex:1 1 420px;
+      background:var(--card);
+      border-radius:var(--radius);
+      padding:18px;
+      box-shadow: 0 6px 18px rgba(10,10,20,0.5);
+    }
+    .lead .intro h2{margin:0 0 6px;color:var(--accent-2)}
+    .lead .intro p{margin:0;color:var(--muted)}
+    .lead .stats{
+      min-width:240px;
+      display:grid;
+      grid-template-columns:1fr;
+      gap:12px;
+    }
+    .stat{
+      background:linear-gradient(180deg, rgba(255,255,255,0.02), transparent);
+      padding:12px;
+      border-radius:10px;
+      text-align:center;
+    }
+    .stat strong{display:block;font-size:1.25rem}
+
+    section.card{
+      background:var(--card);
+      border-radius:var(--radius);
+      padding:18px;
+      margin-bottom:22px;
+      box-shadow: 0 6px 18px rgba(10,10,20,0.45);
+    }
+
+    .grid{
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+      gap:18px;
+    }
+
+    .thinker{
+      background:var(--glass);
+      padding:14px;
+      border-radius:12px;
+      min-height:220px;
+      display:flex;
+      flex-direction:column;
+      justify-content:space-between;
+      border: 1px solid rgba(255,255,255,0.03);
+    }
+    .thinker h3{margin:0 0 6px;color:var(--accent-2)}
+    .thinker .period{color:var(--muted);font-size:0.9rem;margin-bottom:8px}
+    .thinker p{margin:0 0 10px;color:#e7ecff;flex:1}
+
+    .tags{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+    .tag{background:rgba(255,255,255,0.04);padding:6px 8px;border-radius:999px;font-size:0.82rem;color:var(--muted)}
+
+    /* biografia detalhada */
+    .bio{
+      display:grid;
+      grid-template-columns: 1fr 320px;
+      gap:18px;
+      align-items:start;
+    }
+    @media (max-width:900px){ .bio{grid-template-columns:1fr} }
+
+    .bio .text{padding-right:6px}
+    .bio .side{
+      background:linear-gradient(180deg, rgba(255,255,255,0.02), transparent);
+      border-radius:10px;padding:12px;
+      color:var(--muted);
+    }
+    .bio .side strong{color:var(--accent-2);display:block;margin-bottom:8px}
+
+    /* ideias / cards horizontais */
+    .idea{
+      display:flex;
+      gap:14px;
+      align-items:flex-start;
+      padding:12px;
+      border-radius:10px;
+      background:rgba(255,255,255,0.02);
+      margin-bottom:12px;
+    }
+    .idea .dot{width:8px;height:8px;background:var(--accent);border-radius:50%;margin-top:6px}
+    .idea h4{margin:0 0 6px}
+    .idea p{margin:0;color:var(--muted)}
+
+    /* questões */
+    .questions{padding:12px;border-radius:12px;background:linear-gradient(180deg, rgba(255,255,255,0.02), transparent)}
+    .q{padding:12px;margin-bottom:12px;border-radius:8px;background:rgba(0,0,0,0.12)}
+    .q p{margin:0 0 8px}
+    .options{display:flex;flex-wrap:wrap;gap:10px}
+    .opt{background:var(--accent);color:white;padding:8px 12px;border-radius:8px;cursor:pointer;border:none}
+    .opt.wrong{background:#aa1f3d}
+    .opt.correct{background:#2f9d3a}
+    .result{margin-top:14px;padding:12px;background:rgba(0,0,0,0.12);border-radius:8px;color:var(--muted)}
+
+    footer{
+      margin-top:30px;padding:18px;text-align:center;color:var(--muted)
+    }
+
+    /* small helpers */
+    small{color:var(--muted)}
+    a.inline {color:var(--accent-2); text-decoration:none}
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Filosofia — Pensadores, Ideias e Biografias</h1>
+    <p>Resumo didático dos principais pensadores e conceitos + 8 questões interativas</p>
+    <nav aria-label="Principal">
+      <a href="#intro">Início</a>
+      <a href="#pensadores">Pensadores</a>
+      <a href="#ideias">Idéias</a>
+      <a href="#biografias">Biografias</a>
+      <a href="#questoes">Questões</a>
+    </nav>
+  </header>
+
+  <main>
+    <!-- INTRO -->
+    <section id="intro" class="card">
+      <div class="lead">
+        <div class="intro">
+          <h2>O que é Filosofia?</h2>
+          <p>A filosofia é a investigação racional e crítica sobre questões fundamentais: existência, conhecimento,
+            valores, razão, mente e linguagem. Ao contrário das respostas prontas, ela propõe métodos — argumentos,
+            análise conceitual e reflexão — para estruturar o pensamento.</p>
+        </div>
+
+        <div class="stats" aria-hidden="true">
+          <div class="stat"><small>Ramos</small><strong>Metafísica, Ética...</strong></div>
+          <div class="stat"><small>Abordagens</small><strong>Racional, Analítico, Continental</strong></div>
+          <div class="stat"><small>Objetivo</small><strong>Compreender o sentido</strong></div>
+        </div>
+      </div>
+
+      <div class="bio" style="margin-top:18px">
+        <div class="text">
+          <h3>Breve histórico</h3>
+          <p class="container">A filosofia nasce na Grécia antiga com a transição do mito para o logos — explicações
+            racionais do mundo. Desde então atravessou Escolas (estoicismo, ceticismo), Idade Média (sintese teológica),
+            Modernidade (razão, ciência) e a filosofia contemporânea (linguagem, poder, existência).</p>
+
+          <h3 style="margin-top:16px">Ramos principais</h3>
+          <div class="idea"><span class="dot"></span>
+            <div><h4>Metafísica</h4><p>Estuda o ser, o que existe e sua estrutura (ser vs. aparência).</p></div>
+          </div>
+          <div class="idea"><span class="dot"></span>
+            <div><h4>Epistemologia</h4><p>Investiga o que é conhecimento, crença justificável e limites do saber.</p></div>
+          </div>
+          <div class="idea"><span class="dot"></span>
+            <div><h4>Ética</h4><p>Análise dos princípios morais, o que é agir corretamente e teorias do bem.</p></div>
+          </div>
+        </div>
+
+        <aside class="side">
+          <strong>Como estudar filosofia</strong>
+          <p>Leia textos originais (fragmentos, diálogos), pratique leitura lenta e argumentação — destaque premissas e
+            conclusões. Debata; escreva resumos e contra-argumentos.</p>
+          <small>Fonte: síntese didática</small>
+        </aside>
+      </div>
+    </section>
+
+    <!-- PENSADORES -->
+    <section id="pensadores" class="card">
+      <h2>Pensadores Importantes</h2>
+      <p style="color:var(--muted)">Apresentamos os principais pensadores, época, ideias centrais e breve biografia.</p>
+
+      <div class="grid" style="margin-top:14px">
+        <!-- Socrates -->
+        <article class="thinker" id="socrates" aria-labelledby="socrates-title">
+          <div>
+            <h3 id="socrates-title">Sócrates</h3>
+            <div class="period">c. 470–399 a.C. — Grécia</div>
+            <p>Conhecido pela maiêutica e pelo incentivo ao questionamento crítico. Não deixou escritos; sua filosofia
+              chegou via Platão. Central: ética prática e a busca pelo autoconhecimento ("conhece-te a ti mesmo").</p>
+          </div>
+          <div class="tags"><span class="tag">Ética</span><span class="tag">Diálogo</span></div>
+        </article>
+
+        <!-- Plato -->
+        <article class="thinker" id="plato">
+          <div>
+            <h3>Platão</h3>
+            <div class="period">c. 427–347 a.C. — Grécia</div>
+            <p>Discípulo de Sócrates; defendeu a teoria das Formas (ideias imutáveis) como realidade superior às coisas sensíveis.
+              Fundou a Academia; escreveu diálogos (República, Timeu).</p>
+          </div>
+          <div class="tags"><span class="tag">Metafísica</span><span class="tag">Política</span></div>
+        </article>
+
+        <!-- Aristotle -->
+        <article class="thinker" id="aristotle">
+          <div>
+            <h3>Aristóteles</h3>
+            <div class="period">384–322 a.C. — Grécia</div>
+            <p>Aluno de Platão; sistematizou lógica, ética (virtude como meio termo), física e biologia. Instituiu a lógica
+              como disciplina (Organon).</p>
+          </div>
+          <div class="tags"><span class="tag">Lógica</span><span class="tag">Virtude</span></div>
+        </article>
+
+        <!-- Descartes -->
+        <article class="thinker" id="descartes">
+          <div>
+            <h3>René Descartes</h3>
+            <div class="period">1596–1650 — França</div>
+            <p>Pai da filosofia moderna; método da dúvida metódica. "Cogito, ergo sum" (Penso, logo existo). Separou mente e corpo
+              (dualismo) e valorizou a razão como fonte do saber.</p>
+          </div>
+          <div class="tags"><span class="tag">Racionalismo</span><span class="tag">Dualismo</span></div>
+        </article>
+
+        <!-- Kant -->
+        <article class="thinker" id="kant">
+          <div>
+            <h3>Immanuel Kant</h3>
+            <div class="period">1724–1804 — Alemanha</div>
+            <p>Transformou epistemologia e ética: A mente impõe formas ao conhecimento (Espaço/Tempo); ética baseada no dever
+              (imperativo categórico).</p>
+          </div>
+          <div class="tags"><span class="tag">Ética</span><span class="tag">Epistemologia</span></div>
+        </article>
+
+        <!-- Nietzsche -->
+        <article class="thinker" id="nietzsche">
+          <div>
+            <h3>Friedrich Nietzsche</h3>
+            <div class="period">1844–1900 — Alemanha</div>
+            <p>Crítico da moral tradicional e da religião; famoso pelos conceitos de "vontade de poder", "morte de Deus" e "eterno retorno".
+              Estimulou a reflexão sobre valorização e criação de valores.</p>
+          </div>
+          <div class="tags"><span class="tag">Crítica</span><span class="tag">Existencialismo</span></div>
+        </article>
+
+        <!-- Simone de Beauvoir -->
+        <article class="thinker" id="beauvoir">
+          <div>
+            <h3>Simone de Beauvoir</h3>
+            <div class="period">1908–1986 — França</div>
+            <p>Filósofa existencialista e feminista; obra-chave "O Segundo Sexo" analisa a opressão das mulheres e a construção histórica do feminino.</p>
+          </div>
+          <div class="tags"><span class="tag">Existencialismo</span><span class="tag">Feminismo</span></div>
+        </article>
+
+        <!-- Confucius -->
+        <article class="thinker" id="confucius">
+          <div>
+            <h3>Confúcio</h3>
+            <div class="period">c. 551–479 a.C. — China</div>
+            <p>Filósofo chinês que enfatizou ética social, deveres familiares e a importância da educação e rituais para a harmonia social.</p>
+          </div>
+          <div class="tags"><span class="tag">Ética Social</span><span class="tag">Ritual</span></div>
+        </article>
+      </div>
+    </section>
+
+    <!-- IDEIAS -->
+    <section id="ideias" class="card">
+      <h2>Idéias Centrais</h2>
+      <div class="grid" style="margin-top:12px">
+        <div class="container">
+          <h3>Teoria das Formas (Platão)</h3>
+          <p>As Formas (Ideias) são entidades perfeitas e imutáveis; os objetos sensíveis são cópias imperfeitas. Conhecimento verdadeiro refere-se às Formas.</p>
+        </div>
+        <div class="container">
+          <h3>Imperativo Categórico (Kant)</h3>
+          <p>A ação moral deve ser realizada por dever e universalizável: aja segundo a máxima que você deseja ver como lei universal.</p>
+        </div>
+        <div class="container">
+          <h3>Dúvida Metódica (Descartes)</h3>
+          <p>Duvidar de tudo que for incerto até encontrar uma verdade indubitável — base para reconstruir o conhecimento seguro.</p>
+        </div>
+        <div class="container">
+          <h3>Vontade de Poder (Nietzsche)</h3>
+          <p>Não apenas vontade de sobreviver, mas força criadora que expressa afirmar a vida e impor valores.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- BIOGRAFIAS DETALHADAS -->
+    <section id="biografias" class="card">
+      <h2>Biografias Selecionadas</h2>
+
+      <div style="margin-top:14px">
+        <article class="container" style="margin-bottom:12px">
+          <h3>Platão — vida e contexto</h3>
+          <p class="container">Platão (c. 427–347 a.C.) viveu num momento de transformação política na Atenas pós-guerra. Discípulo de Sócrates, suas obras em forma de diálogos exploram justiça, política, conhecimento e amor. Fundou a Academia, primeira instituição filosófica.</p>
+        </article>
+
+        <article class="container" style="margin-bottom:12px">
+          <h3>Immanuel Kant — resumo biográfico</h3>
+          <p class="container">Kant desenvolveu a "Crítica da Razão Pura", procurando reconciliar empirismo e racionalismo. Morador de Königsberg, viveu uma rotina regrada que contribuiu para sua sistematização do pensamento crítico.</p>
+        </article>
+
+        <article class="container">
+          <h3>Simone de Beauvoir — contribuições</h3>
+          <p class="container">Além de "O Segundo Sexo", Beauvoir escreveu romances e ensaios existencialistas; destacou-se ao ligar liberdade individual às questões de opressão social e gênero.</p>
+        </article>
+      </div>
+    </section>
+
+    <!-- QUESTÕES -->
+    <section id="questoes" class="card">
+      <h2>Questões</h2>
+      <p style="color:var(--muted)">Responda às perguntas e compare sua pontuação ao final.</p>
+
+      <div class="questions" id="questions" style="margin-top:12px">
+        <!-- questions serão inseridas por JS -->
+      </div>
+
+      <div id="final" class="result" style="display:none;margin-top:12px"></div>
+    </section>
+  </main>
+
+  <footer>
+    <small>pedrolucasdds24@gmail.com © 2025</small>
+  </footer>
+
+  <script>
+    // Questões (8) - cada item: texto, opções, índice da opção correta (0-based)
+    const questoes = [
+      {
+        q: "1) Quem foi discípulo de Sócrates e autor da teoria das Formas?",
+        options: ["Aristóteles", "Platão", "Descartes"],
+        correct: 1
+      },
+      {
+        q: "2) Qual pensador formulou 'Cogito, ergo sum'?",
+        options: ["Immanuel Kant", "René Descartes", "Nietzsche"],
+        correct: 1
+      },
+      {
+        q: "3) Qual é o foco principal da ética normativa?",
+        options: ["Descrever crenças morais", "Determinar como devemos agir", "Estudar a história das moralidades"],
+        correct: 1
+      },
+      {
+        q: "4) Quem escreveu 'O Segundo Sexo' e é referência no feminismo?",
+        options: ["Hannah Arendt", "Simone de Beauvoir", "Søren Kierkegaard"],
+        correct: 1
+      },
+      {
+        q: "5) O 'imperativo categórico' é associado a qual filósofo?",
+        options: ["Kant", "Plató", "Confúcio"],
+        correct: 0
+      },
+      {
+        q: "6) Quem sistematizou a lógica e escreveu sobre virtude como meio termo?",
+        options: ["Aristóteles", "Sócrates", "Nietzsche"],
+        correct: 0
+      },
+      {
+        q: "7) Quem criticou a moral tradicional e falou sobre 'morte de Deus'?",
+        options: ["Nietzsche", "Descartes", "Kant"],
+        correct: 0
+      },
+      {
+        q: "8) Confúcio é conhecido principalmente por suas reflexões sobre:",
+        options: ["Metafísica abstrata", "Ética social e rituais", "Teoria das formas"],
+        correct: 1
+      }
+    ];
+
+    // monta DOM das questões
+    const container = document.getElementById('questions');
+    let score = 0;
+    let answered = 0;
+
+    questoes.forEach((item, idx) => {
+      const div = document.createElement('div');
+      div.className = 'q';
+      div.setAttribute('data-idx', idx);
+
+      const p = document.createElement('p');
+      p.innerText = item.q;
+      div.appendChild(p);
+
+      const opts = document.createElement('div');
+      opts.className = 'options';
+
+      item.options.forEach((opt, i) => {
+        const btn = document.createElement('button');
+        btn.className = 'opt';
+        btn.type = 'button';
+        btn.innerText = opt;
+        btn.addEventListener('click', () => {
+          // se já respondida, não faz nada
+          if (div.dataset.answered) return;
+          div.dataset.answered = 'true';
+          answered++;
+          if (i === item.correct) {
+            btn.classList.add('correct');
+            score++;
+          } else {
+            btn.classList.add('wrong');
+            // marca a correta visível
+            const children = opts.querySelectorAll('button');
+            children[item.correct].classList.add('correct');
+          }
+          // desabilita todas as opções
+          opts.querySelectorAll('button').forEach(b=>b.disabled=true);
+          // mostra feedback
+          const feedback = document.createElement('div');
+          feedback.className = 'resposta';
+          if (i === item.correct) {
+            feedback.innerText = '✅ Correto!';
+            feedback.style.color = '#9fe6a0';
+          } else {
+            feedback.innerText = '❌ Errado! Resposta correta: ' + item.options[item.correct];
+            feedback.style.color = '#f7a3a3';
+          }
+          div.appendChild(feedback);
+
+          // ao responder todas, mostrar resultado final
+          if (answered === questoes.length) {
+            setTimeout(mostrarResultado, 700);
+          }
+        });
+        opts.appendChild(btn);
+      });
+
+      div.appendChild(opts);
+      container.appendChild(div);
+    });
+
+    function mostrarResultado(){
+      const final = document.getElementById('final');
+      final.style.display = 'block';
+      final.innerHTML = `<strong>Resultado:</strong> Você acertou ${score} de ${questoes.length} questões.
+        <div style="margin-top:8px;color:var(--muted)">Dica: reveja os pensadores que errou clicando nos cards acima.</div>
+        <div style="margin-top:10px"><button onclick="reiniciar()" style="background:var(--accent);padding:8px 12px;border-radius:8px;border:none;color:white">Refazer</button></div>`;
+      final.scrollIntoView({behavior:'smooth', block:'center'});
+    }
+
+    function reiniciar(){
+      // reset
+      score = 0; answered = 0;
+      document.getElementById('final').style.display = 'none';
+      const qnodes = document.querySelectorAll('.q');
+      qnodes.forEach(qn=>{
+        qn.dataset.answered = '';
+        const opts = qn.querySelectorAll('.opt');
+        opts.forEach(b=>{
+          b.disabled=false;
+          b.classList.remove('correct','wrong');
+        });
+        const feed = qn.querySelector('.resposta');
+        if(feed) feed.remove();
+      });
+      window.scrollTo({top:0,behavior:'smooth'});
+    }
+  </script>
+</body>
+</html>
